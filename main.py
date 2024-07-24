@@ -92,7 +92,7 @@ def posliNaMail(mail: str, file: str, gw_number):
     nazev_kont = file.split('/')[-1]
     msg = EmailMessage()
     msg['Subject'] = f'Invio POD, GW_number {gw_number}'
-    msg['From'] = 'gwsyrovice@seznam.cz'
+    msg['From'] = 'xxx@seznam.cz'
     msg['To'] = mail
     msg.set_content(
         f'Automaticky vygenerovany mail.\nNahravani POD Invio...\n\nTestovaci provoz.\n')
@@ -102,12 +102,12 @@ def posliNaMail(mail: str, file: str, gw_number):
                            subtype='pdf', filename=nazev_kont)
     with smtplib.SMTP_SSL('smtp.seznam.cz', 465) as server:
         server = smtplib.SMTP_SSL('smtp.seznam.cz', 465)
-        server.login('gwsyrovice@seznam.cz', 'tajneheslo111')
+        server.login('***@seznam.cz', '***')
         server.send_message(msg)
         
 
 if __name__ == "__main__":
-    sftp = Sftp(hostname = "flux.inviologistics.com", username = "gw-world", password = "aAELDkBwHbya", port = 48769, )
+    sftp = Sftp(hostname = "FTP Invio", username = "***", password = "***", port = ***, )
     # Connect to SFTP
     sftp.connect()
     # Stazeni vsech XML v EXTRA
@@ -132,8 +132,7 @@ if __name__ == "__main__":
             if file.filename.split(".")[0][2:] in seznam_neposlanych:
                 print(f"Soubor {file.filename} prejmenovan dle GW pozice: {gw_number}")
                 sftp.download("/POD/"+file.filename, "locdir/"+gw_number+".pdf")
-                posliNaMail("mirekczk@gmail.com", "locdir/"+gw_number+".pdf", gw_number=gw_number )
-                posliNaMail("viktor.nemecek@gw-world.com", "locdir/"+gw_number+".pdf", gw_number=gw_number )
+                posliNaMail("nekdo@gw-world.com", "locdir/"+gw_number+".pdf", gw_number=gw_number )
                 if os.path.exists(f"locdir/"+gw_number+".pdf"):
                     os.remove(f"locdir/"+gw_number+".pdf")
                 database.update_item(invio_number=invio_number, set_sent_by_email=True)
